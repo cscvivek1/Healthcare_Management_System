@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Healthcare Calendar</title>
+    <link rel="stylesheet" href="/css/styles3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Center the appointment modal */
+        .modal .modal-content {
+            max-width: 600px;
+            width: 90%;
+            margin: 50px auto;
+        }
+        
+        /* Additional styles for health metrics charts */
+        .metrics-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .metric-item {
+            flex: 1 1 calc(33.333% - 20px);
+            min-width: 250px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .metric-chart {
+            height: 200px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .metric-details {
+            text-align: center;
+        }
+        
+        .metric-details h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .metric-details p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #4a6cf7;
+        }
+        
+        /* Dark mode adjustments for charts */
+        .dark-mode .metric-item {
+            background: #2a2a2a;
+        }
+        
+        .dark-mode .metric-details h4 {
+            color: #e0e0e0;
+        }
+
+        /* Styles for edit mode in settings */
+        .edit-mode input:not([disabled]),
+        .edit-mode select:not([disabled]) {
+            border: 1px solid #4a6cf7;
+            background-color: #f8f9fa;
+        }
+        
+        .dark-mode .edit-mode input:not([disabled]),
+        .dark-mode .edit-mode select:not([disabled]) {
+            background-color: #333;
+            border: 1px solid #4a6cf7;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-heartbeat pulse"></i>
+                    <h2>MediCare</h2>
+                </div>
+                <button id="sidebarToggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="User Avatar" id="userAvatar">
+                    <span class="status-indicator online"></span>
+                </div>
+                <div class="user-details">
+                    <h3 id="userName">Vivek</h3>
+                    <p id="userRole">Patient</p>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#" data-section="overview">
+                            <i class="fas fa-home"></i>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="profile">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="appointments">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Appointments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="medical-records">
+                            <i class="fas fa-file-medical"></i>
+                            <span>Medical Records</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="find-doctors">
+                            <i class="fas fa-user-md"></i>
+                            <span>Find Doctors</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="bed-availability">
+                            <i class="fas fa-bed"></i>
+                            <span>Bed Availability</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="emergency">
+                            <i class="fas fa-ambulance"></i>
+                            <span>Emergency</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for doctors, services...">
+                </div>
+                
+                <div class="header-actions">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                        <div class="notification-dropdown">
+                            <div class="notification-header">
+                                <h3>Notifications</h3>
+                                <a href="#">Mark all as read</a>
+                            </div>
+                            <div class="notification-list">
+                                <div class="notification-item unread">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>Appointment with Dr. Smith tomorrow at 10:00 AM</p>
+                                        <span class="notification-time">1 hour ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item unread">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-file-medical"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>Your lab results are now available</p>
+                                        <span class="notification-time">3 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item unread">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>Payment received for your last appointment</p>
+                                        <span class="notification-time">Yesterday</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="#">View all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="dashboard-sections">
+                <!-- Overview Section -->
+                <section id="overview" class="dashboard-section active">
+                    <h2 class="section-title">Dashboard Overview</h2>
+                    
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Upcoming Appointments</h3>
+                                <p class="stat-number">3</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-medical"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Medical Records</h3>
+                                <p class="stat-number">12</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Active Prescriptions</h3>
+                                <p class="stat-number">2</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Pending Payments</h3>
+                                <p class="stat-number">$150</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="appointment-cards">
+                            <!-- Appointments will be loaded dynamically here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Fixed script to load appointments -->
+                    <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const patientName = "Vivek"; // Hardcoded patient name instead of template variable
+                    
+                        // Try to load appointments from localStorage first
+                        let appointments = [];
+                        const storedAppointments = localStorage.getItem('patientAppointments');
+                        
+                        if (storedAppointments) {
+                            appointments = JSON.parse(storedAppointments);
+                            displayAppointments(appointments);
+                        } else {
+                            // Fallback to API if no local appointments
+                            fetch(`/api/appointments/patient-appointments?patientName=${encodeURIComponent(patientName)}`)
+                                .then(res => res.json())
+                                .then(data => {
+                                    displayAppointments(data.appointments);
+                                })
+                                .catch(err => {
+                                    console.error("Failed to load appointments:", err);
+                                    // Show sample appointments if API fails
+                                    displaySampleAppointments();
+                                });
+                        }
+                        
+                        // Function to display appointments
+                        function displayAppointments(appointmentsList) {
+                            const containers = document.querySelectorAll(".appointment-cards");
+                            
+                            containers.forEach(container => {
+                                container.innerHTML = "";
+                                
+                                if (!appointmentsList || appointmentsList.length === 0) {
+                                    container.innerHTML = "<p>No appointments scheduled.</p>";
+                                    return;
+                                }
+                                
+                                appointmentsList.forEach((apt, index) => {
+                                    const date = new Date(apt.date);
+                                    const day = date.getDate();
+                                    const month = date.toLocaleString('default', { month: 'short' });
+                                    
+                                    const card = `
+                                        <div class="appointment-item" data-index="${index}">
+                                            <div class="appointment-date">
+                                                <div class="date">${day}</div>
+                                                <div class="month">${month}</div>
+                                            </div>
+                                            <div class="appointment-details">
+                                                <h4>Dr. ${apt.doctorName}</h4>
+                                                <p>${apt.specialty}</p>
+                                                <div class="appointment-time">
+                                                    <i class="fas fa-clock"></i>
+                                                    <span>${apt.time}</span>
+                                                </div>
+                                            </div>
+                                            <div class="appointment-actions">
+                                                <button class="btn-secondary btn-sm">Reschedule</button>
+                                                <button class="btn-outline btn-sm cancel-appointment">Cancel</button>
+                                            </div>
+                                        </div>
+                                    `;
+                                    container.innerHTML += card;
+                                });
+                                
+                                // Add event listeners to cancel buttons
+                                const cancelButtons = container.querySelectorAll('.cancel-appointment');
+                                cancelButtons.forEach(button => {
+                                    button.addEventListener('click', function() {
+                                        const appointmentItem = this.closest('.appointment-item');
+                                        const index = appointmentItem.getAttribute('data-index');
+                                        cancelAppointment(parseInt(index));
+                                    });
+                                });
+                            });
+                            
+                            // Update the appointment count in the stats
+                            const appointmentCountElement = document.querySelector(".stat-card:first-child .stat-number");
+                            if (appointmentCountElement) {
+                                appointmentCountElement.textContent = appointmentsList.length;
+                            }
+                        }
+                        
+                        // Function to cancel an appointment
+                        function cancelAppointment(index) {
+                            // Get appointments from localStorage
+                            const storedAppointments = localStorage.getItem('patientAppointments');
+                            if (!storedAppointments) return;
+                            
+                            let appointments = JSON.parse(storedAppointments);
+                            
+                            // Confirm cancellation
+                            if (confirm(`Are you sure you want to cancel your appointment with Dr. ${appointments[index].doctorName}?`)) {
+                                // Remove the appointment at the specified index
+                                appointments.splice(index, 1);
+                                
+                                // Save updated appointments back to localStorage
+                                localStorage.setItem('patientAppointments', JSON.stringify(appointments));
+                                
+                                // Update the UI
+                                displayAppointments(appointments);
+                                
+                                // Show confirmation message
+                                alert('Appointment cancelled successfully');
+                            }
+                        }
+                        
+                        // Display sample appointments if API fails
+                        function displaySampleAppointments() {
+                            const sampleAppointments = [
+                                {
+                                    doctorName: "Sarah Smith",
+                                    specialty: "Cardiology",
+                                    date: "2023-05-15",
+                                    time: "10:00 AM"
+                                },
+                                {
+                                    doctorName: "Michael Johnson",
+                                    specialty: "General Medicine",
+                                    date: "2023-05-22",
+                                    time: "2:00 PM"
+                                }
+                            ];
+                            
+                            displayAppointments(sampleAppointments);
+                        }
+                    });
+                    </script>
+                    
+                        
+                        
+                        <div class="dashboard-card recent-prescriptions">
+                            <div class="card-header">
+                                <h3>Recent Prescriptions</h3>
+                                <a href="#" class="view-all">View All</a>
+                            </div>
+                            <div class="card-content">
+                                <div class="prescription-item">
+                                    <div class="prescription-icon">
+                                        <i class="fas fa-pills"></i>
+                                    </div>
+                                    <div class="prescription-details">
+                                        <h4>Amoxicillin</h4>
+                                        <p>500mg, 3 times daily for 7 days</p>
+                                        <div class="prescription-date">
+                                            <i class="fas fa-calendar"></i>
+                                            <span>Prescribed on: May 5, 2023</span>
+                                        </div>
+                                    </div>
+                                    <div class="prescription-actions">
+                                        <button class="btn-primary btn-sm">View Details</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="prescription-item">
+                                    <div class="prescription-icon">
+                                        <i class="fas fa-pills"></i>
+                                    </div>
+                                    <div class="prescription-details">
+                                        <h4>Lisinopril</h4>
+                                        <p>10mg, once daily</p>
+                                        <div class="prescription-date">
+                                            <i class="fas fa-calendar"></i>
+                                            <span>Prescribed on: April 20, 2023</span>
+                                        </div>
+                                    </div>
+                                    <div class="prescription-actions">
+                                        <button class="btn-primary btn-sm">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card health-metrics">
+                            <div class="card-header">
+                                <h3>Health Metrics</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="metrics-container">
+                                    <div class="metric-item">
+                                        <div class="metric-chart">
+                                            <canvas id="bloodPressureChart"></canvas>
+                                        </div>
+                                        <div class="metric-details">
+                                            <h4>Blood Pressure</h4>
+                                            <p>120/80 mmHg</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="metric-item">
+                                        <div class="metric-chart">
+                                            <canvas id="heartRateChart"></canvas>
+                                        </div>
+                                        <div class="metric-details">
+                                            <h4>Heart Rate</h4>
+                                            <p>72 bpm</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="metric-item">
+                                        <div class="metric-chart">
+                                            <canvas id="weightChart"></canvas>
+                                        </div>
+                                        <div class="metric-details">
+                                            <h4>Weight</h4>
+                                            <p>165 lbs</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Profile Section -->
+                <section id="profile" class="dashboard-section">
+                    <h2 class="section-title">My Profile</h2>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card profile-card">
+                            <div class="card-header">
+                                <h3>Personal Information</h3>
+                                <button class="btn-primary btn-sm" id="editProfileBtn">
+                                    <i class="fas fa-edit"></i> Edit Profile
+                                </button>
+                            </div>
+                            <div class="card-content">
+                                <div class="profile-info">
+                                    <div class="profile-avatar">
+                                        <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="Profile Picture">
+                                        <div class="avatar-overlay">
+                                            <i class="fas fa-camera"></i>
+                                            <span>Change Photo</span>
+                                        </div>
+                                    </div>
+                                    <div class="profile-details">
+                                        <div class="profile-row">
+                                            <div class="profile-field">
+                                                <label>Full Name</label>
+                                                <p id="profileFullName">Vivek</p>
+                                            </div>
+                                            <div class="profile-field">
+                                                <label>Date of Birth</label>
+                                                <p id="profileDateOfBirth">15 Jan 1985</p>
+                                            </div>
+                                        </div>
+                                        <div class="profile-row">
+                                            <div class="profile-field">
+                                                <label>Email</label>
+                                                <p id="profileEmail">john.doe@example.com</p>
+                                            </div>
+                                            <div class="profile-field">
+                                                <label>Phone</label>
+                                                <p id="profilePhone">+1 (555) 123-4567</p>
+                                            </div>
+                                        </div>
+                                        <div class="profile-row">
+                                            <div class="profile-field">
+                                                <label>Blood Type</label>
+                                                <p id="profileBloodType">O+</p>
+                                            </div>
+                                            <div class="profile-field">
+                                                <label>Gender</label>
+                                                <p id="profileGender">Male</p>
+                                            </div>
+                                        </div>
+                                        <div class="profile-row">
+                                            <div class="profile-field full-width">
+                                                <label>Address</label>
+                                                <p id="profileAddress">123 Main Street, Apt 4B, New York, NY 10001</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Medical History</h3>
+                                <button class="btn-primary btn-sm" id="editMedicalHistoryBtn">
+                                    <i class="fas fa-edit"></i> Update
+                                </button>
+                            </div>
+                            <div class="card-content">
+                                <div class="medical-history">
+                                    <div class="medical-history-item">
+                                        <h4>Allergies</h4>
+                                        <ul>
+                                            <li>Penicillin</li>
+                                            <li>Peanuts</li>
+                                        </ul>
+                                    </div>
+                                    <div class="medical-history-item">
+                                        <h4>Chronic Conditions</h4>
+                                        <ul>
+                                            <li>Hypertension (diagnosed 2018)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="medical-history-item">
+                                        <h4>Past Surgeries</h4>
+                                        <ul>
+                                            <li>Appendectomy (2010)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="medical-history-item">
+                                        <h4>Family Medical History</h4>
+                                        <ul>
+                                            <li>Father: Diabetes Type 2</li>
+                                            <li>Mother: Hypertension</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Appointments Section -->
+                <section id="appointments" class="dashboard-section">
+                    <h2 class="section-title">Appointments</h2>
+
+                    <!-- ✅ Appointment cards will show here -->
+                    <div class="appointment-cards">
+                      <!-- JS will insert cards here -->
+                    </div>
+
+                    <div class="section-actions">
+                        <button id="newAppointmentBtn" class="btn-primary">
+                            <i class="fas fa-plus"></i> New Appointment
+                        </button>
+                    </div>
+                    
+                    <div class="calendar-container">
+                        <div class="calendar-sidebar">
+                            <div class="month-selector">
+                                <div class="current-month">
+                                    <h3 id="currentMonth">May 2023</h3>
+                                    <div class="month-navigation">
+                                        <button class="calendar-nav prev">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </button>
+                                        <button class="calendar-nav next">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button class="today-btn">Today</button>
+                            </div>
+                            
+                            <div class="mini-calendar">
+                                <div class="mini-calendar-header">
+                                    <div>S</div>
+                                    <div>M</div>
+                                    <div>T</div>
+                                    <div>W</div>
+                                    <div>T</div>
+                                    <div>F</div>
+                                    <div>S</div>
+                                </div>
+                                <div class="mini-calendar-days" id="miniCalendarDays">
+                                    <!-- Mini calendar days will be generated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="upcoming-events">
+                                <h4>Upcoming Appointments</h4>
+                                <div class="event-list">
+                                    <div class="event-item">
+                                        <div class="event-date">
+                                            <span class="event-day">15</span>
+                                            <span class="event-month">May</span>
+                                        </div>
+                                        <div class="event-details">
+                                            <h5>Dr. Sarah Smith</h5>
+                                            <p>Cardiology - 10:00 AM</p>
+                                        </div>
+                                    </div>
+                                    <div class="event-item">
+                                        <div class="event-date">
+                                            <span class="event-day">22</span>
+                                            <span class="event-month">May</span>
+                                        </div>
+                                        <div class="event-details">
+                                            <h5>Dr. Michael Johnson</h5>
+                                            <p>General Checkup - 2:00 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-main">
+                            <div class="calendar-view-options">
+                                <button class="view-option active" data-view="month">Month</button>
+                                <button class="view-option" data-view="week">Week</button>
+                                <button class="view-option" data-view="day">Day</button>
+                                <button class="view-option" data-view="agenda">Agenda</button>
+                            </div>
+                            
+                            <div class="calendar-weekdays">
+                                <div>Sunday</div>
+                                <div>Monday</div>
+                                <div>Tuesday</div>
+                                <div>Wednesday</div>
+                                <div>Thursday</div>
+                                <div>Friday</div>
+                                <div>Saturday</div>
+                            </div>
+                            
+                            <div class="calendar-days" id="calendarDays">
+                                <!-- Calendar days will be generated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="appointments-list">
+                        <h3>Today's Appointments</h3>
+                        
+                        <div class="appointment-cards">
+                            <div class="appointment-card">
+                                <div class="appointment-header">
+                                    <div class="appointment-date">
+                                        <div class="date">15</div>
+                                        <div class="month">May</div>
+                                    </div>
+                                    <div class="appointment-status confirmed">Confirmed</div>
+                                </div>
+                                
+                                <div class="appointment-body">
+                                    <div class="doctor-info">
+                                        <img src="https://randomuser.me/api/portraits/women/36.jpg" alt="Doctor Avatar">
+                                        <div>
+                                            <h4>Dr. Sarah Smith</h4>
+                                            <p>Cardiology</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="appointment-details">
+                                        <div class="detail-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span>10:00 AM - 10:30 AM</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Main Hospital, Room 305</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="appointment-footer">
+                                    <button class="btn-secondary">Reschedule</button>
+                                    <button class="btn-outline cancel-appointment">Cancel</button>
+                                    <button class="btn-primary">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Medical Records Section -->
+                <section id="medical-records" class="dashboard-section">
+                    <h2 class="section-title">Medical Records</h2>
+                    
+                    <div class="section-actions">
+                        <button id="uploadRecordBtn" class="btn-primary">
+                            <i class="fas fa-upload"></i> Upload Record
+                        </button>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Recent Medical Records</h3>
+                                <div class="filter-dropdown">
+                                    <button class="btn-outline btn-sm">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="records-list">
+                                    <div class="record-item">
+                                        <div class="record-icon">
+                                            <i class="fas fa-file-medical"></i>
+                                        </div>
+                                        <div class="record-details">
+                                            <h4>Blood Test Results</h4>
+                                            <p>Complete Blood Count (CBC)</p>
+                                            <div class="record-meta">
+                                                <span><i class="fas fa-calendar"></i> May 5, 2023</span>
+                                                <span><i class="fas fa-user-md"></i> Dr. Sarah Smith</span>
+                                            </div>
+                                        </div>
+                                        <div class="record-actions">
+                                            <button class="btn-primary btn-sm">View</button>
+                                            <button class="btn-outline btn-sm">Download</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="record-item">
+                                        <div class="record-icon">
+                                            <i class="fas fa-file-medical"></i>
+                                        </div>
+                                        <div class="record-details">
+                                            <h4>Chest X-Ray</h4>
+                                            <p>Radiological Examination</p>
+                                            <div class="record-meta">
+                                                <span><i class="fas fa-calendar"></i> April 20, 2023</span>
+                                                <span><i class="fas fa-user-md"></i> Dr. Michael Johnson</span>
+                                            </div>
+                                        </div>
+                                        <div class="record-actions">
+                                            <button class="btn-primary btn-sm">View</button>
+                                            <button class="btn-outline btn-sm">Download</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="record-item">
+                                        <div class="record-icon">
+                                            <i class="fas fa-file-medical"></i>
+                                        </div>
+                                        <div class="record-details">
+                                            <h4>Cardiology Report</h4>
+                                            <p>ECG and Stress Test Results</p>
+                                            <div class="record-meta">
+                                                <span><i class="fas fa-calendar"></i> March 15, 2023</span>
+                                                <span><i class="fas fa-user-md"></i> Dr. Sarah Smith</span>
+                                            </div>
+                                        </div>
+                                        <div class="record-actions">
+                                            <button class="btn-primary btn-sm">View</button>
+                                            <button class="btn-outline btn-sm">Download</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Prescriptions</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="prescriptions-list">
+                                    <div class="prescription-item">
+                                        <div class="prescription-icon">
+                                            <i class="fas fa-pills"></i>
+                                        </div>
+                                        <div class="prescription-details">
+                                            <h4>Amoxicillin</h4>
+                                            <p>500mg, 3 times daily for 7 days</p>
+                                            <div class="prescription-date">
+                                                <i class="fas fa-calendar"></i>
+                                                <span>Prescribed on: May 5, 2023</span>
+                                            </div>
+                                        </div>
+                                        <div class="prescription-actions">
+                                            <button class="btn-primary btn-sm">View Details</button>
+                                            <button class="btn-outline btn-sm">Download</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="prescription-item">
+                                        <div class="prescription-icon">
+                                            <i class="fas fa-pills"></i>
+                                        </div>
+                                        <div class="prescription-details">
+                                            <h4>Lisinopril</h4>
+                                            <p>10mg, once daily</p>
+                                            <div class="prescription-date">
+                                                <i class="fas fa-calendar"></i>
+                                                <span>Prescribed on: April 20, 2023</span>
+                                            </div>
+                                        </div>
+                                        <div class="prescription-actions">
+                                            <button class="btn-primary btn-sm">View Details</button>
+                                            <button class="btn-outline btn-sm">Download</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Find Doctors Section -->
+                <section id="find-doctors" class="dashboard-section">
+                    <h2 class="section-title">Find Doctors</h2>
+                    
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <input type="text" placeholder="Search by name or specialty" class="search-input">
+                        </div>
+                        <div class="filter-group">
+                            <select id="specialtyFilter">
+                                <option value="">All Specialties</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="dermatology">Dermatology</option>
+                                <option value="neurology">Neurology</option>
+                                <option value="orthopedics">Orthopedics</option>
+                                <option value="pediatrics">Pediatrics</option>
+                                <option value="psychiatry">Psychiatry</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <select id="availabilityFilter">
+                                <option value="">Any Availability</option>
+                                <option value="today">Today</option>
+                                <option value="tomorrow">Tomorrow</option>
+                                <option value="this-week">This Week</option>
+                                <option value="next-week">Next Week</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" id="searchDoctorsBtn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                    
+                    <div class="doctors-grid">
+                        <div class="doctor-card">
+                            <div class="doctor-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/36.jpg" alt="Doctor Avatar">
+                            </div>
+                            <div class="doctor-info">
+                                <h4>Dr. Sarah Smith</h4>
+                                <p class="doctor-specialty">Cardiology</p>
+                                <div class="doctor-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>4.5 (120 reviews)</span>
+                                </div>
+                                <p class="doctor-location"><i class="fas fa-map-marker-alt"></i> Main Hospital, 3rd Floor</p>
+                            </div>
+                            <div class="doctor-actions">
+                                <button class="btn-primary doctor-book-btn" data-doctor="Sarah Smith" data-specialty="Cardiology">Book Appointment</button>
+                                <button class="btn-outline">View Profile</button>
+                            </div>
+                        </div>
+                        
+                        <div class="doctor-card">
+                            <div class="doctor-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Doctor Avatar">
+                            </div>
+                            <div class="doctor-info">
+                                <h4>Dr. Michael Johnson</h4>
+                                <p class="doctor-specialty">General Medicine</p>
+                                <div class="doctor-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>5.0 (98 reviews)</span>
+                                </div>
+                                <p class="doctor-location"><i class="fas fa-map-marker-alt"></i> Main Hospital, 2nd Floor</p>
+                            </div>
+                            <div class="doctor-actions">
+                                <button class="btn-primary doctor-book-btn" data-doctor="Michael Johnson" data-specialty="General Medicine">Book Appointment</button>
+                                <button class="btn-outline">View Profile</button>
+                            </div>
+                        </div>
+                        
+                        <div class="doctor-card">
+                            <div class="doctor-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Doctor Avatar">
+                            </div>
+                            <div class="doctor-info">
+                                <h4>Dr. Lisa Wong</h4>
+                                <p class="doctor-specialty">Dermatology</p>
+                                <div class="doctor-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span>4.0 (75 reviews)</span>
+                                </div>
+                                <p class="doctor-location"><i class="fas fa-map-marker-alt"></i> East Wing, 4th Floor</p>
+                            </div>
+                            <div class="doctor-actions">
+                                <button class="btn-primary doctor-book-btn" data-doctor="Lisa Wong" data-specialty="Dermatology">Book Appointment</button>
+                                <button class="btn-outline">View Profile</button>
+                            </div>
+                        </div>
+                        
+                        <div class="doctor-card">
+                            <div class="doctor-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Doctor Avatar">
+                            </div>
+                            <div class="doctor-info">
+                                <h4>Dr. James Wilson</h4>
+                                <p class="doctor-specialty">Neurology</p>
+                                <div class="doctor-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>4.7 (112 reviews)</span>
+                                </div>
+                                <p class="doctor-location"><i class="fas fa-map-marker-alt"></i> West Wing, 5th Floor</p>
+                            </div>
+                            <div class="doctor-actions">
+                                <button class="btn-primary doctor-book-btn" data-doctor="James Wilson" data-specialty="Neurology">Book Appointment</button>
+                                <button class="btn-outline">View Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Bed Availability Section -->
+                <section id="bed-availability" class="dashboard-section">
+                    <h2 class="section-title">Bed Availability</h2>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Current Bed Status</h3>
+                                <span class="last-updated">Last updated: Today, 10:30 AM</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="bed-status-overview">
+                                    <div class="bed-status-item">
+                                        <div class="bed-status-icon available">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <div class="bed-status-details">
+                                            <h4>Available</h4>
+                                            <p class="bed-count">24</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bed-status-item">
+                                        <div class="bed-status-icon occupied">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <div class="bed-status-details">
+                                            <h4>Occupied</h4>
+                                            <p class="bed-count">76</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bed-status-item">
+                                        <div class="bed-status-icon reserved">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <div class="bed-status-details">
+                                            <h4>Reserved</h4>
+                                            <p class="bed-count">12</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bed-status-item">
+                                        <div class="bed-status-icon maintenance">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <div class="bed-status-details">
+                                            <h4>Maintenance</h4>
+                                            <p class="bed-count">8</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Bed Availability by Department</h3>
+                                <div class="filter-dropdown">
+                                    <button class="btn-outline btn-sm">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="bed-departments">
+                                    <div class="bed-department-item">
+                                        <div class="department-info">
+                                            <h4>General Ward</h4>
+                                            <div class="bed-progress">
+                                                <div class="progress-bar" style="width: 80%"></div>
+                                            </div>
+                                            <div class="bed-count-info">
+                                                <span>8 Available</span>
+                                                <span>40 Total</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn-primary btn-sm">Request</button>
+                                    </div>
+                                    
+                                    <div class="bed-department-item">
+                                        <div class="department-info">
+                                            <h4>ICU</h4>
+                                            <div class="bed-progress">
+                                                <div class="progress-bar" style="width: 90%"></div>
+                                            </div>
+                                            <div class="bed-count-info">
+                                                <span>2 Available</span>
+                                                <span>20 Total</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn-primary btn-sm">Request</button>
+                                    </div>
+                                    
+                                    <div class="bed-department-item">
+                                        <div class="department-info">
+                                            <h4>Pediatrics</h4>
+                                            <div class="bed-progress">
+                                                <div class="progress-bar" style="width: 65%"></div>
+                                            </div>
+                                            <div class="bed-count-info">
+                                                <span>7 Available</span>
+                                                <span>20 Total</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn-primary btn-sm">Request</button>
+                                    </div>
+                                    
+                                    <div class="bed-department-item">
+                                        <div class="department-info">
+                                            <h4>Maternity</h4>
+                                            <div class="bed-progress">
+                                                <div class="progress-bar" style="width: 70%"></div>
+                                            </div>
+                                            <div class="bed-count-info">
+                                                <span>6 Available</span>
+                                                <span>20 Total</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn-primary btn-sm">Request</button>
+                                    </div>
+                                    
+                                    <div class="bed-department-item">
+                                        <div class="department-info">
+                                            <h4>Cardiology</h4>
+                                            <div class="bed-progress">
+                                                <div class="progress-bar" style="width: 85%"></div>
+                                            </div>
+                                            <div class="bed-count-info">
+                                                <span>3 Available</span>
+                                                <span>20 Total</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn-primary btn-sm">Request</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Emergency Section -->
+                <section id="emergency" class="dashboard-section">
+                    <h2 class="section-title">Emergency Services</h2>
+                    
+                    <div class="emergency-alert">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="emergency-alert-content">
+                            <h3>In case of medical emergency, please call 911 immediately</h3>
+                            <p>For non-life-threatening emergencies, you can use the services below</p>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Emergency Contacts</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="emergency-contacts">
+                                    <div class="emergency-contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <h4>Emergency Hotline</h4>
+                                            <p>24/7 Medical Assistance</p>
+                                            <a href="tel:+18001234567" class="contact-number">1-800-123-4567</a>
+                                        </div>
+                                        <button class="btn-primary">Call Now</button>
+                                    </div>
+                                    
+                                    <div class="emergency-contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-ambulance"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <h4>Ambulance Service</h4>
+                                            <p>Emergency Transport</p>
+                                            <a href="tel:+18009876543" class="contact-number">1-800-987-6543</a>
+                                        </div>
+                                        <button class="btn-primary">Call Now</button>
+                                    </div>
+                                    
+                                    <div class="emergency-contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-video"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <h4>Video Consultation</h4>
+                                            <p>Speak with a doctor now</p>
+                                            <span class="availability available">Available Now</span>
+                                        </div>
+                                        <button class="btn-primary">Start Call</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Nearby Emergency Facilities</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="emergency-facilities">
+                                    <div class="facility-item">
+                                        <div class="facility-icon">
+                                            <i class="fas fa-hospital"></i>
+                                        </div>
+                                        <div class="facility-details">
+                                            <h4>City General Hospital</h4>
+                                            <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, New York, NY 10001</p>
+                                            <p><i class="fas fa-phone"></i> (212) 555-1234</p>
+                                            <div class="facility-status open">
+                                                <span>Open 24/7</span>
+                                                <span>1.2 miles away</span>
+                                            </div>
+                                        </div>
+                                        <div class="facility-actions">
+                                            <button class="btn-primary">Get Directions</button>
+                                            <button class="btn-outline">Call</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="facility-item">
+                                        <div class="facility-icon">
+                                            <i class="fas fa-clinic-medical"></i>
+                                        </div>
+                                        <div class="facility-details">
+                                            <h4>Urgent Care Center</h4>
+                                            <p><i class="fas fa-map-marker-alt"></i> 456 Park Avenue, New York, NY 10022</p>
+                                            <p><i class="fas fa-phone"></i> (212) 555-5678</p>
+                                            <div class="facility-status open">
+                                                <span>Open until 10:00 PM</span>
+                                                <span>0.8 miles away</span>
+                                            </div>
+                                        </div>
+                                        <div class="facility-actions">
+                                            <button class="btn-primary">Get Directions</button>
+                                            <button class="btn-outline">Call</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Payments Section -->
+                <section id="payments" class="dashboard-section">
+                    <h2 class="section-title">Payments</h2>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Payment Summary</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="payment-summary">
+                                    <div class="payment-summary-item">
+                                        <div class="summary-icon paid">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="summary-details">
+                                            <h4>Paid</h4>
+                                            <p class="summary-amount">$850.00</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="payment-summary-item">
+                                        <div class="summary-icon pending">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="summary-details">
+                                            <h4>Pending</h4>
+                                            <p class="summary-amount">$150.00</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="payment-summary-item">
+                                        <div class="summary-icon insurance">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <div class="summary-details">
+                                            <h4>Insurance Covered</h4>
+                                            <p class="summary-amount">$1,250.00</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Recent Invoices</h3>
+                                <div class="filter-dropdown">
+                                    <button class="btn-outline btn-sm">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="invoices-list">
+                                    <div class="invoice-item">
+                                        <div class="invoice-details">
+                                            <h4>Invoice #INV-2023-001</h4>
+                                            <p>Cardiology Consultation</p>
+                                            <div class="invoice-meta">
+                                                <span><i class="fas fa-calendar"></i> May 5, 2023</span>
+                                                <span><i class="fas fa-user-md"></i> Dr. Sarah Smith</span>
+                                            </div>
+                                        </div>
+                                        <div class="invoice-amount">
+                                            <p class="amount">$150.00</p>
+                                            <span class="status pending">Pending</span>
+                                        </div>
+                                        <div class="invoice-actions">
+                                            <button class="btn-primary">Pay Now</button>
+                                            <button class="btn-outline">View</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="invoice-item">
+                                        <div class="invoice-details">
+                                            <h4>Invoice #INV-2023-002</h4>
+                                            <p>Blood Tests</p>
+                                            <div class="invoice-meta">
+                                                <span><i class="fas fa-calendar"></i> April 20, 2023</span>
+                                                <span><i class="fas fa-flask"></i> Lab Services</span>
+                                            </div>
+                                        </div>
+                                        <div class="invoice-amount">
+                                            <p class="amount">$75.00</p>
+                                            <span class="status paid">Paid</span>
+                                        </div>
+                                        <div class="invoice-actions">
+                                            <button class="btn-outline">View</button>
+                                            <button class="btn-outline">Download</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="invoice-item">
+                                        <div class="invoice-details">
+                                            <h4>Invoice #INV-2023-003</h4>
+                                            <p>General Checkup</p>
+                                            <div class="invoice-meta">
+                                                <span><i class="fas fa-calendar"></i> March 15, 2023</span>
+                                                <span><i class="fas fa-user-md"></i> Dr. Michael Johnson</span>
+                                            </div>
+                                        </div>
+                                        <div class="invoice-amount">
+                                            <p class="amount">$125.00</p>
+                                            <span class="status paid">Paid</span>
+                                        </div>
+                                        <div class="invoice-actions">
+                                            <button class="btn-outline">View</button>
+                                            <button class="btn-outline">Download</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Payment Methods</h3>
+                                <button class="btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i> Add New
+                                </button>
+                            </div>
+                            <div class="card-content">
+                                <div class="payment-methods">
+                                    <div class="payment-method-item">
+                                        <div class="payment-method-icon">
+                                            <i class="fab fa-cc-visa"></i>
+                                        </div>
+                                        <div class="payment-method-details">
+                                            <h4>Visa ending in 4567</h4>
+                                            <p>Expires 05/2025</p>
+                                        </div>
+                                        <div class="payment-method-actions">
+                                            <button class="btn-outline btn-sm">Edit</button>
+                                            <button class="btn-outline btn-sm">Remove</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="payment-method-item">
+                                        <div class="payment-method-icon">
+                                            <i class="fab fa-cc-mastercard"></i>
+                                        </div>
+                                        <div class="payment-method-details">
+                                            <h4>Mastercard ending in 8901</h4>
+                                            <p>Expires 12/2024</p>
+                                        </div>
+                                        <div class="payment-method-actions">
+                                            <button class="btn-outline btn-sm">Edit</button>
+                                            <button class="btn-outline btn-sm">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Settings Section -->
+                <section id="settings" class="dashboard-section">
+                    <h2 class="section-title">Settings</h2>
+                    
+                    <div class="settings-tabs">
+                        <button class="settings-tab active" data-tab="account">Account</button>
+                        <button class="settings-tab" data-tab="security">Security</button>
+                        <button class="settings-tab" data-tab="notifications">Notifications</button>
+                        <button class="settings-tab" data-tab="preferences">Preferences</button>
+                    </div>
+                    
+                    <div class="settings-content">
+                        <div class="settings-panel active" id="account-panel">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h3>Account Information</h3>
+                                    <button class="btn-primary btn-sm" id="editAccountBtn">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </div>
+                                <div class="card-content">
+                                    <form id="accountForm" class="settings-form">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="fullName">Full Name</label>
+                                                <input type="text" id="fullName" value="Vivek" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="email" id="email" value="john.doe@example.com" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="phone">Phone</label>
+                                                <input type="tel" id="phone" value="+1 (555) 123-4567" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="dateOfBirth">Date of Birth</label>
+                                                <input type="date" id="dateOfBirth" value="1985-01-15" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="bloodType">Blood Type</label>
+                                                <select id="bloodType" disabled>
+                                                    <option value="A+">A+</option>
+                                                    <option value="A-">A-</option>
+                                                    <option value="B+">B+</option>
+                                                    <option value="B-">B-</option>
+                                                    <option value="AB+">AB+</option>
+                                                    <option value="AB-">AB-</option>
+                                                    <option value="O+" selected>O+</option>
+                                                    <option value="O-">O-</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="gender">Gender</label>
+                                                <select id="gender" disabled>
+                                                    <option value="male" selected>Male</option>
+                                                    <option value="female">Female</option>
+                                                    <option value="other">Other</option>
+                                                    <option value="prefer-not-to-say">Prefer not to say</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group full-width">
+                                                <label for="address">Address</label>
+                                                <input type="text" id="address" value="123 Main Street, Apt 4B, New York, NY 10001" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions" style="display: none;">
+                                            <button type="button" class="btn-outline" id="cancelEditBtn">Cancel</button>
+                                            <button type="button" class="btn-primary" id="saveAccountBtn">Save Changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-panel" id="security-panel">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h3>Change Password</h3>
+                                </div>
+                                <div class="card-content">
+                                    <form id="passwordForm">
+                                        <div class="form-group">
+                                            <label for="currentPassword">Current Password</label>
+                                            <input type="password" id="currentPassword" placeholder="Enter current password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="newPassword">New Password</label>
+                                            <input type="password" id="newPassword" placeholder="Enter new password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="confirmPassword">Confirm New Password</label>
+                                            <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                        </div>
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn-primary">Update Password</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h3>Two-Factor Authentication</h3>
+                                </div>
+                                <div class="card-content">
+                                    <div class="two-factor-status">
+                                        <div class="status-icon">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <div class="status-details">
+                                            <h4>Two-Factor Authentication is Disabled</h4>
+                                            <p>Add an extra layer of security to your account by enabling two-factor authentication.</p>
+                                        </div>
+                                        <button class="btn-primary">Enable</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-panel" id="notifications-panel">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h3>Notification Preferences</h3>
+                                </div>
+                                <div class="card-content">
+                                    <div class="notification-preferences">
+                                        <div class="notification-option">
+                                            <div class="option-details">
+                                                <h4>Appointment Reminders</h4>
+                                                <p>Receive reminders about upcoming appointments</p>
+                                            </div>
+                                            <div class="notification-toggles">
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">Email</span>
+                                                </label>
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">SMS</span>
+                                                </label>
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">Push</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="notification-option">
+                                            <div class="option-details">
+                                                <h4>Prescription Refills</h4>
+                                                <p>Receive notifications when prescriptions need to be refilled</p>
+                                            </div>
+                                            <div class="notification-toggles">
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">Email</span>
+                                                </label>
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">SMS</span>
+                                                </label>
+                                                <label class="toggle">
+                                                    <input type="checkbox">
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">Push</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="notification-option">
+                                            <div class="option-details">
+                                                <h4>Lab Results</h4>
+                                                <p>Receive notifications when new lab results are available</p>
+                                            </div>
+                                            <div class="notification-toggles">
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">Email</span>
+                                                </label>
+                                                <label class="toggle">
+                                                    <input type="checkbox">
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">SMS</span>
+                                                </label>
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">Push</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="notification-option">
+                                            <div class="option-details">
+                                                <h4>Payment Reminders</h4>
+                                                <p>Receive reminders about upcoming or overdue payments</p>
+                                            </div>
+                                            <div class="notification-toggles">
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">Email</span>
+                                                </label>
+                                                <label class="toggle">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">SMS</span>
+                                                </label>
+                                                <label class="toggle">
+                                                    <input type="checkbox">
+                                                    <span class="toggle-slider"></span>
+                                                    <span class="toggle-label">Push</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-panel" id="preferences-panel">
+                            <div class="dashboard-card">
+                                <div class="card-header">
+                                    <h3>Display Preferences</h3>
+                                </div>
+                                <div class="card-content">
+                                    <div class="preferences-options">
+                                        <div class="preference-option">
+                                            <div class="option-details">
+                                                <h4>Dark Mode</h4>
+                                                <p>Switch between light and dark theme</p>
+                                            </div>
+                                            <label class="toggle">
+                                                <input type="checkbox" id="darkModeToggle">
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="preference-option">
+                                            <div class="option-details">
+                                                <h4>Font Size</h4>
+                                                <p>Adjust the text size throughout the application</p>
+                                            </div>
+                                            <div class="font-size-selector">
+                                                <button class="btn-outline btn-sm font-size-btn" data-size="small">Small</button>
+                                                <button class="btn-outline btn-sm font-size-btn active" data-size="medium">Medium</button>
+                                                <button class="btn-outline btn-sm font-size-btn" data-size="large">Large</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="preference-option">
+                                            <div class="option-details">
+                                                <h4>Language</h4>
+                                                <p>Select your preferred language</p>
+                                            </div>
+                                            <select id="languageSelect" class="language-selector">
+                                                <option value="en">English</option>
+                                                <option value="es">Español</option>
+                                                <option value="fr">Français</option>
+                                                <option value="de">Deutsch</option>
+                                                <option value="zh">中文</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <!-- New Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Book New Appointment</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label for="appointmentType">Appointment Type</label>
+                        <select id="appointmentType" required>
+                            <option value="">Select Type</option>
+                            <option value="general">General Checkup</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="dermatology">Dermatology</option>
+                            <option value="neurology">Neurology</option>
+                            <option value="orthopedics">Orthopedics</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointmentDoctor">Doctor</label>
+                        <select id="appointmentDoctor" required>
+                            <option value="">Select Doctor</option>
+                            <!-- Options will be populated based on selected type -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointmentDate">Date</label>
+                        <input type="date" id="appointmentDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointmentTime">Time</label>
+                        <select id="appointmentTime" required>
+                            <option value="">Select Time</option>
+                            <!-- Options will be populated based on selected date and doctor -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointmentNotes">Notes (Optional)</label>
+                        <textarea id="appointmentNotes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-outline" id="cancelAppointmentBtn">Cancel</button>
+                <button class="btn-primary" id="saveAppointmentBtn">Book Appointment</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editFullName">Full Name</label>
+                            <input type="text" id="editFullName" value="Vivek" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editDateOfBirth">Date of Birth</label>
+                            <input type="date" id="editDateOfBirth" value="1985-01-15" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editEmail">Email</label>
+                            <input type="email" id="editEmail" value="john.doe@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editPhone">Phone</label>
+                            <input type="tel" id="editPhone" value="+1 (555) 123-4567" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editBloodType">Blood Type</label>
+                            <select id="editBloodType" required>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+" selected>O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editGender">Gender</label>
+                            <select id="editGender" required>
+                                <option value="male" selected>Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="editAddress">Address</label>
+                            <input type="text" id="editAddress" value="123 Main Street, Apt 4B, New York, NY 10001" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-outline" id="cancelEditProfileBtn">Cancel</button>
+                <button class="btn-primary" id="saveProfileBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize appointment data in localStorage if not exists
+        if (!localStorage.getItem('patientAppointments')) {
+            const initialAppointments = [
+                {
+                    doctorName: "Sarah Smith",
+                    specialty: "Cardiology",
+                    date: "2023-05-15",
+                    time: "10:00 AM"
+                },
+                {
+                    doctorName: "Michael Johnson",
+                    specialty: "General Medicine",
+                    date: "2023-05-22",
+                    time: "2:00 PM"
+                }
+            ];
+            localStorage.setItem('patientAppointments', JSON.stringify(initialAppointments));
+        }
+        
+        // Initialize user profile data in localStorage if not exists
+        if (!localStorage.getItem('userProfile')) {
+            const initialProfile = {
+                fullName: "Vivek",
+                email: "john.doe@example.com",
+                phone: "+1 (555) 123-4567",
+                dateOfBirth: "1985-01-15",
+                bloodType: "O+",
+                gender: "male",
+                address: "123 Main Street, Apt 4B, New York, NY 10001"
+            };
+            localStorage.setItem('userProfile', JSON.stringify(initialProfile));
+        }
+        
+        // Load user profile data
+        function loadUserProfile() {
+            const storedProfile = localStorage.getItem('userProfile');
+            if (storedProfile) {
+                const profile = JSON.parse(storedProfile);
+                
+                // Update profile section
+                document.getElementById('profileFullName').textContent = profile.fullName;
+                document.getElementById('profileEmail').textContent = profile.email;
+                document.getElementById('profilePhone').textContent = profile.phone;
+                
+                // Format date of birth for display
+                const dob = new Date(profile.dateOfBirth);
+                const formattedDob = `${dob.getDate()} ${dob.toLocaleString('default', { month: 'short' })} ${dob.getFullYear()}`;
+                document.getElementById('profileDateOfBirth').textContent = formattedDob;
+                
+                document.getElementById('profileBloodType').textContent = profile.bloodType;
+                document.getElementById('profileGender').textContent = profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1);
+                document.getElementById('profileAddress').textContent = profile.address;
+                
+                // Update settings form
+                document.getElementById('fullName').value = profile.fullName;
+                document.getElementById('email').value = profile.email;
+                document.getElementById('phone').value = profile.phone;
+                document.getElementById('dateOfBirth').value = profile.dateOfBirth;
+                document.getElementById('address').value = profile.address;
+                
+                // Set select values
+                const bloodTypeSelect = document.getElementById('bloodType');
+                for (let i = 0; i < bloodTypeSelect.options.length; i++) {
+                    if (bloodTypeSelect.options[i].value === profile.bloodType) {
+                        bloodTypeSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+                
+                const genderSelect = document.getElementById('gender');
+                for (let i = 0; i < genderSelect.options.length; i++) {
+                    if (genderSelect.options[i].value === profile.gender) {
+                        genderSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+                
+                // Update edit profile modal
+                document.getElementById('editFullName').value = profile.fullName;
+                document.getElementById('editEmail').value = profile.email;
+                document.getElementById('editPhone').value = profile.phone;
+                document.getElementById('editDateOfBirth').value = profile.dateOfBirth;
+                document.getElementById('editAddress').value = profile.address;
+                
+                // Set select values in edit modal
+                const editBloodTypeSelect = document.getElementById('editBloodType');
+                for (let i = 0; i < editBloodTypeSelect.options.length; i++) {
+                    if (editBloodTypeSelect.options[i].value === profile.bloodType) {
+                        editBloodTypeSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+                
+                const editGenderSelect = document.getElementById('editGender');
+                for (let i = 0; i < editGenderSelect.options.length; i++) {
+                    if (editGenderSelect.options[i].value === profile.gender) {
+                        editGenderSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+                
+                // Update user name in sidebar
+                document.getElementById('userName').textContent = profile.fullName;
+            }
+        }
+        
+        // Load user profile on page load
+        loadUserProfile();
+        
+        // Handle appointment form submission
+        const appointmentForm = document.getElementById('appointmentForm');
+        const saveAppointmentBtn = document.getElementById('saveAppointmentBtn');
+        const appointmentModal = document.getElementById('appointmentModal');
+        const newAppointmentBtn = document.getElementById('newAppointmentBtn');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const cancelAppointmentBtn = document.getElementById('cancelAppointmentBtn');
+        
+        // Doctor booking buttons in Find Doctors section
+        const doctorBookBtns = document.querySelectorAll('.doctor-book-btn');
+        
+        // Populate doctor dropdown based on appointment type
+        const appointmentType = document.getElementById('appointmentType');
+        const appointmentDoctor = document.getElementById('appointmentDoctor');
+        
+        appointmentType.addEventListener('change', function() {
+            const specialty = this.value;
+            appointmentDoctor.innerHTML = '<option value="">Select Doctor</option>';
+            
+            // Add doctors based on specialty
+            const doctors = {
+                'general': ['Michael Johnson', 'Robert Williams'],
+                'cardiology': ['Sarah Smith', 'Jennifer Davis'],
+                'dermatology': ['Lisa Wong', 'David Miller'],
+                'neurology': ['James Wilson', 'Patricia Brown'],
+                'orthopedics': ['Thomas Anderson', 'Elizabeth Taylor']
+            };
+            
+            if (doctors[specialty]) {
+                doctors[specialty].forEach(doctor => {
+                    const option = document.createElement('option');
+                    option.value = doctor;
+                    option.textContent = `Dr. ${doctor}`;
+                    appointmentDoctor.appendChild(option);
+                });
+            }
+        });
+        
+        // Populate time slots based on date and doctor
+        const appointmentDate = document.getElementById('appointmentDate');
+        const appointmentTime = document.getElementById('appointmentTime');
+        
+        appointmentDate.addEventListener('change', function() {
+            populateTimeSlots();
+        });
+        
+        appointmentDoctor.addEventListener('change', function() {
+            populateTimeSlots();
+        });
+        
+        function populateTimeSlots() {
+            appointmentTime.innerHTML = '<option value="">Select Time</option>';
+            
+            // Generate time slots from 9 AM to 5 PM
+            const timeSlots = [
+                '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', 
+                '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
+                '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM',
+                '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'
+            ];
+            
+            timeSlots.forEach(time => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = time;
+                appointmentTime.appendChild(option);
+            });
+        }
+        
+        // Open modal when New Appointment button is clicked
+        if (newAppointmentBtn) {
+            newAppointmentBtn.addEventListener('click', function() {
+                appointmentModal.style.display = 'block';
+            });
+        }
+        
+        // Open modal when Book Appointment is clicked in Find Doctors section
+        doctorBookBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const doctorName = this.getAttribute('data-doctor');
+                const specialty = this.getAttribute('data-specialty');
+                
+                // Set the appointment type based on specialty
+                const specialtyValue = specialty.toLowerCase();
+                appointmentType.value = specialtyValue;
+                
+                // Trigger change event to populate doctors
+                const event = new Event('change');
+                appointmentType.dispatchEvent(event);
+                
+                // Set the doctor
+                for (let i = 0; i < appointmentDoctor.options.length; i++) {
+                    if (appointmentDoctor.options[i].text === `Dr. ${doctorName}`) {
+                        appointmentDoctor.selectedIndex = i;
+                        break;
+                    }
+                }
+                
+                // Open the modal
+                appointmentModal.style.display = 'block';
+            });
+        });
+        
+        // Close modal when X button is clicked
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = this.closest('.modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+        
+        // Close modal when Cancel button is clicked
+        if (cancelAppointmentBtn) {
+            cancelAppointmentBtn.addEventListener('click', function() {
+                appointmentModal.style.display = 'none';
+            });
+        }
+        
+        // Close modal when clicking outside of it
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+        
+        // Handle appointment form submission
+        if (saveAppointmentBtn) {
+            saveAppointmentBtn.addEventListener('click', function() {
+                const type = appointmentType.value;
+                const doctor = appointmentDoctor.value;
+                const date = appointmentDate.value;
+                const time = appointmentTime.value;
+                const notes = document.getElementById('appointmentNotes').value;
+                
+                if (!type || !doctor || !date || !time) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                // Create new appointment object
+                const newAppointment = {
+                    doctorName: doctor.replace('Dr. ', ''),
+                    specialty: type.charAt(0).toUpperCase() + type.slice(1),
+                    date: date,
+                    time: time,
+                    notes: notes
+                };
+                
+                // Get existing appointments from localStorage
+                let appointments = [];
+                const storedAppointments = localStorage.getItem('patientAppointments');
+                
+                if (storedAppointments) {
+                    appointments = JSON.parse(storedAppointments);
+                }
+                
+                // Add new appointment
+                appointments.push(newAppointment);
+                
+                // Save back to localStorage
+                localStorage.setItem('patientAppointments', JSON.stringify(appointments));
+                
+                // Update the UI
+                updateAppointmentsUI(appointments);
+                
+                // Close the modal
+                appointmentModal.style.display = 'none';
+                
+                // Reset form
+                appointmentForm.reset();
+                
+                // Show success message
+                alert('Appointment booked successfully!');
+            });
+        }
+        
+        // Function to update appointments UI
+        function updateAppointmentsUI(appointments) {
+            const containers = document.querySelectorAll(".appointment-cards");
+            
+            containers.forEach(container => {
+                container.innerHTML = "";
+                
+                if (!appointments || appointments.length === 0) {
+                    container.innerHTML = "<p>No appointments scheduled.</p>";
+                    return;
+                }
+                
+                appointments.forEach((apt, index) => {
+                    const date = new Date(apt.date);
+                    const day = date.getDate();
+                    const month = date.toLocaleString('default', { month: 'short' });
+                    
+                    const card = `
+                        <div class="appointment-item" data-index="${index}">
+                            <div class="appointment-date">
+                                <div class="date">${day}</div>
+                                <div class="month">${month}</div>
+                            </div>
+                            <div class="appointment-details">
+                                <h4>Dr. ${apt.doctorName}</h4>
+                                <p>${apt.specialty}</p>
+                                <div class="appointment-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>${apt.time}</span>
+                                </div>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn-secondary btn-sm">Reschedule</button>
+                                <button class="btn-outline btn-sm cancel-appointment">Cancel</button>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+                
+                // Add event listeners to cancel buttons
+                const cancelButtons = container.querySelectorAll('.cancel-appointment');
+                cancelButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const appointmentItem = this.closest('.appointment-item');
+                        const index = appointmentItem.getAttribute('data-index');
+                        cancelAppointment(parseInt(index));
+                    });
+                });
+            });
+            
+            // Update the appointment count in the stats
+            const appointmentCountElement = document.querySelector(".stat-card:first-child .stat-number");
+            if (appointmentCountElement) {
+                appointmentCountElement.textContent = appointments.length;
+            }
+        }
+        
+        // Function to cancel an appointment
+        function cancelAppointment(index) {
+            // Get appointments from localStorage
+            const storedAppointments = localStorage.getItem('patientAppointments');
+            if (!storedAppointments) return;
+            
+            let appointments = JSON.parse(storedAppointments);
+            
+            // Confirm cancellation
+            if (confirm(`Are you sure you want to cancel your appointment with Dr. ${appointments[index].doctorName}?`)) {
+                // Remove the appointment at the specified index
+                appointments.splice(index, 1);
+                
+                // Save updated appointments back to localStorage
+                localStorage.setItem('patientAppointments', JSON.stringify(appointments));
+                
+                // Update the UI
+                updateAppointmentsUI(appointments);
+                
+                // Show confirmation message
+                alert('Appointment cancelled successfully');
+            }
+        }
+        
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+        const sections = document.querySelectorAll('.dashboard-section');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links and sections
+                navLinks.forEach(l => l.parentElement.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.parentElement.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+        
+        // Toggle sidebar on mobile
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+            });
+        }
+        
+        // Dark mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        if (themeToggle) {
+            // Check if dark mode is saved in localStorage
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('dark-mode');
+                
+                if (body.classList.contains('dark-mode')) {
+                    localStorage.setItem('darkMode', 'enabled');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    localStorage.setItem('darkMode', 'disabled');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            });
+        }
+        
+        // Initialize health metrics charts
+        function initializeCharts() {
+            // Blood Pressure Chart
+            const bpCtx = document.getElementById('bloodPressureChart').getContext('2d');
+            const bpChart = new Chart(bpCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'Systolic',
+                            data: [125, 122, 130, 128, 120, 125],
+                            borderColor: '#4a6cf7',
+                            backgroundColor: 'rgba(74, 108, 247, 0.1)',
+                            tension: 0.4,
+                            fill: false
+                        },
+                        {
+                            label: 'Diastolic',
+                            data: [82, 80, 85, 83, 80, 82],
+                            borderColor: '#6c757d',
+                            backgroundColor: 'rgba(108, 117, 125, 0.1)',
+                            tension: 0.4,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 60,
+                            max: 160,
+                            title: {
+                                display: true,
+                                text: 'mmHg'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Heart Rate Chart
+            const hrCtx = document.getElementById('heartRateChart').getContext('2d');
+            const hrChart = new Chart(hrCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Heart Rate',
+                        data: [75, 72, 78, 70, 72, 74],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 50,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'BPM'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Weight Chart
+            const weightCtx = document.getElementById('weightChart').getContext('2d');
+            const weightChart = new Chart(weightCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Weight',
+                        data: [168, 167, 166, 165, 165, 165],
+                        backgroundColor: 'rgba(40, 167, 69, 0.6)',
+                        borderColor: '#28a745',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 160,
+                            max: 175,
+                            title: {
+                                display: true,
+                                text: 'lbs'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Call the function to initialize charts when the page loads
+        if (document.getElementById('bloodPressureChart')) {
+            initializeCharts();
+        }
+        
+        // Add event listeners to all cancel appointment buttons in the Today's Appointments section
+        const todayAppointmentCancelBtns = document.querySelectorAll('.appointment-footer .cancel-appointment');
+        todayAppointmentCancelBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const appointmentCard = this.closest('.appointment-card');
+                const doctorName = appointmentCard.querySelector('.doctor-info h4').textContent.replace('Dr. ', '');
+                
+                // Find the appointment in localStorage
+                const storedAppointments = localStorage.getItem('patientAppointments');
+                if (!storedAppointments) return;
+                
+                let appointments = JSON.parse(storedAppointments);
+                const index = appointments.findIndex(apt => apt.doctorName === doctorName);
+                
+                if (index !== -1) {
+                    // Confirm cancellation
+                    if (confirm(`Are you sure you want to cancel your appointment with Dr. ${doctorName}?`)) {
+                        // Remove the appointment
+                        appointments.splice(index, 1);
+                        
+                        // Save updated appointments back to localStorage
+                        localStorage.setItem('patientAppointments', JSON.stringify(appointments));
+                        
+                        // Update the UI
+                        updateAppointmentsUI(appointments);
+                        
+                        // Remove the appointment card
+                        appointmentCard.remove();
+                        
+                        // Show confirmation message
+                        alert('Appointment cancelled successfully');
+                    }
+                }
+            });
+        });
+        
+        // Handle edit profile functionality
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const editProfileModal = document.getElementById('editProfileModal');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const cancelEditProfileBtn = document.getElementById('cancelEditProfileBtn');
+        
+        if (editProfileBtn) {
+            editProfileBtn.addEventListener('click', function() {
+                editProfileModal.style.display = 'block';
+            });
+        }
+        
+        if (cancelEditProfileBtn) {
+            cancelEditProfileBtn.addEventListener('click', function() {
+                editProfileModal.style.display = 'none';
+            });
+        }
+        
+        if (saveProfileBtn) {
+            saveProfileBtn.addEventListener('click', function() {
+                // Get values from form
+                const fullName = document.getElementById('editFullName').value;
+                const email = document.getElementById('editEmail').value;
+                const phone = document.getElementById('editPhone').value;
+                const dateOfBirth = document.getElementById('editDateOfBirth').value;
+                const bloodType = document.getElementById('editBloodType').value;
+                const gender = document.getElementById('editGender').value;
+                const address = document.getElementById('editAddress').value;
+                
+                // Validate form
+                if (!fullName || !email || !phone || !dateOfBirth || !bloodType || !gender || !address) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                // Create profile object
+                const profile = {
+                    fullName,
+                    email,
+                    phone,
+                    dateOfBirth,
+                    bloodType,
+                    gender,
+                    address
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('userProfile', JSON.stringify(profile));
+                
+                // Update UI
+                loadUserProfile();
+                
+                // Close modal
+                editProfileModal.style.display = 'none';
+                
+                // Show success message
+                alert('Profile updated successfully');
+            });
+        }
+        
+        // Handle edit account functionality in settings
+        const editAccountBtn = document.getElementById('editAccountBtn');
+        const saveAccountBtn = document.getElementById('saveAccountBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const accountForm = document.getElementById('accountForm');
+        
+        if (editAccountBtn) {
+            editAccountBtn.addEventListener('click', function() {
+                // Enable form fields
+                const formInputs = accountForm.querySelectorAll('input, select');
+                formInputs.forEach(input => {
+                    input.disabled = false;
+                });
+                
+                // Show action buttons
+                const formActions = accountForm.querySelector('.form-actions');
+                formActions.style.display = 'flex';
+                
+                // Hide edit button
+                this.style.display = 'none';
+                
+                // Add edit mode class for styling
+                accountForm.classList.add('edit-mode');
+            });
+        }
+        
+        if (cancelEditBtn) {
+            cancelEditBtn.addEventListener('click', function() {
+                // Disable form fields
+                const formInputs = accountForm.querySelectorAll('input, select');
+                formInputs.forEach(input => {
+                    input.disabled = true;
+                });
+                
+                // Hide action buttons
+                const formActions = accountForm.querySelector('.form-actions');
+                formActions.style.display = 'none';
+                
+                // Show edit button
+                editAccountBtn.style.display = 'block';
+                
+                // Remove edit mode class
+                accountForm.classList.remove('edit-mode');
+                
+                // Reset form to original values
+                loadUserProfile();
+            });
+        }
+        
+        if (saveAccountBtn) {
+            saveAccountBtn.addEventListener('click', function() {
+                // Get values from form
+                const fullName = document.getElementById('fullName').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const dateOfBirth = document.getElementById('dateOfBirth').value;
+                const bloodType = document.getElementById('bloodType').value;
+                const gender = document.getElementById('gender').value;
+                const address = document.getElementById('address').value;
+                
+                // Validate form
+                if (!fullName || !email || !phone || !dateOfBirth || !bloodType || !gender || !address) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                // Create profile object
+                const profile = {
+                    fullName,
+                    email,
+                    phone,
+                    dateOfBirth,
+                    bloodType,
+                    gender,
+                    address
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('userProfile', JSON.stringify(profile));
+                
+                // Update UI
+                loadUserProfile();
+                
+                // Disable form fields
+                const formInputs = accountForm.querySelectorAll('input, select');
+                formInputs.forEach(input => {
+                    input.disabled = true;
+                });
+                
+                // Hide action buttons
+                const formActions = accountForm.querySelector('.form-actions');
+                formActions.style.display = 'none';
+                
+                // Show edit button
+                editAccountBtn.style.display = 'block';
+                
+                // Remove edit mode class
+                accountForm.classList.remove('edit-mode');
+                
+                // Show success message
+                alert('Profile updated successfully');
+            });
+        }
+        
+        // Settings tabs functionality
+        const settingsTabs = document.querySelectorAll('.settings-tab');
+        const settingsPanels = document.querySelectorAll('.settings-panel');
+        
+        settingsTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and panels
+                settingsTabs.forEach(t => t.classList.remove('active'));
+                settingsPanels.forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Show corresponding panel
+                const panelId = this.getAttribute('data-tab') + '-panel';
+                document.getElementById(panelId).classList.add('active');
+            });
+        });
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+    localStorage.clear();
+    window.location.href = '/';
+});
+
+  
+
+
+
+    
+    </script>
+</body>
+</html>

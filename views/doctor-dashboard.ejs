@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicare - Doctor Dashboard</title>
+    <link rel="stylesheet" href="/css/styles2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container" id="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <h2>Medicare</h2>
+                </div>
+                <button id="mobile-toggle" class="mobile-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="doctor-info">
+                <div class="doctor-avatar">
+                    <img src="images/vecteezy_ai-generated-male-doctor-crossed-arms-isolated-on_35438423.png" alt="Doctor Avatar">
+                </div>
+                <div class="doctor-details">
+                    <h3>Dr. Vivek</h3>
+                    <p>Cardiologist</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active" data-page="dashboard-overview">
+                        <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li data-page="appointments">
+                        <a href="#"><i class="fas fa-calendar-check"></i> Appointments</a>
+                    </li>
+                    <li data-page="emergency">
+                        <a href="#"><i class="fas fa-ambulance"></i> Emergency</a>
+                    </li>
+                    <li data-page="patients">
+                        <a href="#"><i class="fas fa-user-injured"></i> Patients</a>
+                    </li>
+                    <li data-page="chat">
+                        <a href="#"><i class="fas fa-comments"></i> Chat</a>
+                    </li>
+                    <li data-page="profile">
+                        <a href="#"><i class="fas fa-user-md"></i> Profile</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <div class="search-container">
+                    <input type="text" id="patient-search" placeholder="Search patients...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="header-actions">
+                    <div class="notification">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="date-time">
+                        <span id="current-date"></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Overview Section -->
+            <section id="dashboard-overview" class="content-section active">
+                <h2 class="section-title">Dashboard Overview</h2>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Today's Appointments</h3>
+                            <p class="stat-number">8</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Total Patients</h3>
+                            <p class="stat-number">145</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon emergency-icon">
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Emergency Cases</h3>
+                            <p class="stat-number">3</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>New Messages</h3>
+                            <p class="stat-number">12</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card upcoming-appointments">
+                        <div class="card-header">
+                            <h3>Upcoming Appointments</h3>
+                            <a href="#" class="view-all">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="upcoming-appointments-table">
+                                    <!-- Appointments will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card emergency-cases">
+                        <div class="card-header">
+                            <h3>Emergency Cases</h3>
+                            <a href="#" class="view-all">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Condition</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="emergency-cases-table">
+                                    <!-- Emergency cases will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appointments Section -->
+            <section id="appointments" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Appointment Management</h2>
+                    <button class="btn-primary" id="add-appointment-btn">
+                        <i class="fas fa-plus"></i> New Appointment
+                    </button>
+                </div>
+
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label for="appointment-date-filter">Date:</label>
+                        <input type="date" id="appointment-date-filter">
+                    </div>
+                    <div class="filter-group">
+                        <label for="appointment-status-filter">Status:</label>
+                        <select id="appointment-status-filter">
+                            <option value="all">All</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <button class="btn-secondary" id="apply-filters-btn">Apply Filters</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointments-table">
+                            <!-- Appointments will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Appointment Form Modal -->
+                <div id="appointment-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="appointment-modal-title">Add New Appointment</h3>
+                            <button class="close-modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="appointment-form">
+                                <input type="hidden" id="appointment-id">
+                                <div class="form-group">
+                                    <label for="patient-select">Patient:</label>
+                                    <select id="patient-select" required>
+                                        <option value="">Select Patient</option>
+                                        <!-- Patients will be loaded here -->
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="appointment-date">Date:</label>
+                                        <input type="date" id="appointment-date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="appointment-time">Time:</label>
+                                        <input type="time" id="appointment-time" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="appointment-purpose">Purpose:</label>
+                                    <input type="text" id="appointment-purpose" placeholder="Reason for visit" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="appointment-status">Status:</label>
+                                    <select id="appointment-status" required>
+                                        <option value="scheduled">Scheduled</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="appointment-notes">Notes:</label>
+                                    <textarea id="appointment-notes" rows="3" placeholder="Additional notes"></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn-secondary" id="cancel-appointment-btn">Cancel</button>
+                                    <button type="submit" class="btn-primary" id="save-appointment-btn">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emergency Section -->
+            <section id="emergency" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Emergency Management</h2>
+                    <button class="btn-danger" id="add-emergency-btn">
+                        <i class="fas fa-plus"></i> New Emergency Case
+                    </button>
+                </div>
+
+                <div class="emergency-stats">
+                    <div class="emergency-stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Active Cases</div>
+                    </div>
+                    <div class="emergency-stat-card">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">On-Call Staff</div>
+                    </div>
+                    <div class="emergency-stat-card">
+                        <div class="stat-number">15 min</div>
+                        <div class="stat-label">Avg. Response Time</div>
+                    </div>
+                </div>
+
+                <div class="emergency-schedule">
+                    <h3 class="subsection-title">Your Emergency Schedule</h3>
+                    <div class="schedule-container">
+                        <div class="schedule-item active">
+                            <div class="schedule-date">Today</div>
+                            <div class="schedule-time">8:00 PM - 8:00 AM</div>
+                            <div class="schedule-status">On Call</div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-date">Apr 5, 2025</div>
+                            <div class="schedule-time">8:00 PM - 8:00 AM</div>
+                            <div class="schedule-status">On Call</div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-date">Apr 12, 2025</div>
+                            <div class="schedule-time">8:00 PM - 8:00 AM</div>
+                            <div class="schedule-status">On Call</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="subsection-title">Active Emergency Cases</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Admitted</th>
+                                <th>Condition</th>
+                                <th>Vital Signs</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emergency-table">
+                            <!-- Emergency cases will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Emergency Form Modal -->
+                <div id="emergency-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="emergency-modal-title">Add New Emergency Case</h3>
+                            <button class="close-modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="emergency-form">
+                                <input type="hidden" id="emergency-id">
+                                <div class="form-group">
+                                    <label for="emergency-patient-select">Patient:</label>
+                                    <select id="emergency-patient-select" required>
+                                        <option value="">Select Patient</option>
+                                        <!-- Patients will be loaded here -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="emergency-condition">Condition:</label>
+                                    <input type="text" id="emergency-condition" placeholder="Patient condition" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="emergency-bp">Blood Pressure:</label>
+                                        <input type="text" id="emergency-bp" placeholder="e.g. 120/80">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="emergency-pulse">Pulse:</label>
+                                        <input type="text" id="emergency-pulse" placeholder="e.g. 75 bpm">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="emergency-temp">Temperature:</label>
+                                        <input type="text" id="emergency-temp" placeholder="e.g. 98.6°F">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="emergency-oxygen">Oxygen Saturation:</label>
+                                        <input type="text" id="emergency-oxygen" placeholder="e.g. 98%">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="emergency-status">Status:</label>
+                                    <select id="emergency-status" required>
+                                        <option value="critical">Critical</option>
+                                        <option value="stable">Stable</option>
+                                        <option value="improving">Improving</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="emergency-notes">Notes:</label>
+                                    <textarea id="emergency-notes" rows="3" placeholder="Additional notes"></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn-secondary" id="cancel-emergency-btn">Cancel</button>
+                                    <button type="submit" class="btn-danger" id="save-emergency-btn">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Patients Section -->
+            <section id="patients" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Patient Records</h2>
+                    <button class="btn-primary" id="add-patient-btn">
+                        <i class="fas fa-plus"></i> New Patient
+                    </button>
+                </div>
+
+                <div class="filter-container">
+                    <div class="search-group">
+                        <input type="text" id="patient-search-field" placeholder="Search by name, ID, or condition...">
+                        <button class="btn-secondary" id="search-patient-btn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Contact</th>
+                                <th>Last Visit</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patients-table">
+                            <!-- Patients will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Patient Form Modal -->
+                <div id="patient-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="patient-modal-title">Add New Patient</h3>
+                            <button class="close-modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="patient-form">
+                                <input type="hidden" id="patient-id">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="patient-first-name">First Name:</label>
+                                        <input type="text" id="patient-first-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="patient-last-name">Last Name:</label>
+                                        <input type="text" id="patient-last-name" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="patient-dob">Date of Birth:</label>
+                                        <input type="date" id="patient-dob" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="patient-gender">Gender:</label>
+                                        <select id="patient-gender" required>
+                                            <option value="">Select Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="patient-email">Email:</label>
+                                        <input type="email" id="patient-email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="patient-phone">Phone:</label>
+                                        <input type="tel" id="patient-phone" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="patient-address">Address:</label>
+                                    <textarea id="patient-address" rows="2" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="patient-medical-history">Medical History:</label>
+                                    <textarea id="patient-medical-history" rows="3"></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn-secondary" id="cancel-patient-btn">Cancel</button>
+                                    <button type="submit" class="btn-primary" id="save-patient-btn">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Details Modal -->
+                <div id="patient-details-modal" class="modal">
+                    <div class="modal-content modal-lg">
+                        <div class="modal-header">
+                            <h3 id="patient-details-name">Patient Details</h3>
+                            <button class="close-modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="patient-details-container">
+                                <div class="patient-info-section">
+                                    <h4>Personal Information</h4>
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <span class="info-label">ID:</span>
+                                            <span id="details-patient-id" class="info-value"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Age:</span>
+                                            <span id="details-patient-age" class="info-value"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Gender:</span>
+                                            <span id="details-patient-gender" class="info-value"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Email:</span>
+                                            <span id="details-patient-email" class="info-value"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Phone:</span>
+                                            <span id="details-patient-phone" class="info-value"></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Address:</span>
+                                            <span id="details-patient-address" class="info-value"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="patient-medical-section">
+                                    <h4>Medical History</h4>
+                                    <p id="details-patient-medical-history"></p>
+                                </div>
+
+                                <div class="patient-visits-section">
+                                    <h4>Recent Visits</h4>
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Reason</th>
+                                                <th>Diagnosis</th>
+                                                <th>Prescription</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="patient-visits-table">
+                                            <!-- Visits will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="patient-actions">
+                                    <button class="btn-secondary" id="add-visit-btn">
+                                        <i class="fas fa-plus"></i> Add Visit
+                                    </button>
+                                    <button class="btn-primary" id="schedule-appointment-btn">
+                                        <i class="fas fa-calendar-plus"></i> Schedule Appointment
+                                    </button>
+                                    <button class="btn-danger" id="add-emergency-case-btn">
+                                        <i class="fas fa-ambulance"></i> Emergency Case
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Section -->
+            <section id="chat" class="content-section">
+                <h2 class="section-title">Chat</h2>
+                
+                <div class="chat-container">
+                    <div class="chat-sidebar">
+                        <div class="chat-search">
+                            <input type="text" placeholder="Search conversations...">
+                        </div>
+                        <div class="chat-contacts" id="chat-contacts">
+                            <!-- Chat contacts will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="chat-main">
+                        <div class="chat-header">
+                            <div class="chat-user-info">
+                                <img src="images/vecteezy_ai-generated-a-smiling-doctor-with-glasses-and-a-white-lab_41408858.png" alt="User Avatar" class="chat-avatar">
+                                <div class="chat-user-details">
+                                    <h4 id="chat-user-name">Select a contact</h4>
+                                    <span id="chat-user-status" class="chat-status">Offline</span>
+                                </div>
+                            </div>
+                            <div class="chat-actions">
+                                <button class="chat-action-btn" title="Video Call">
+                                    <i class="fas fa-video"></i>
+                                </button>
+                                <button class="chat-action-btn" title="Voice Call">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                                <button class="chat-action-btn" title="More Options">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-start-message">
+                                <p>Select a contact to start chatting</p>
+                            </div>
+                            <!-- Messages will be loaded here -->
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <button class="chat-attach-btn" title="Attach File">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <input type="text" id="chat-input" placeholder="Type a message...">
+                            <button class="chat-send-btn" id="chat-send-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="content-section">
+                <h2 class="section-title">Profile Management</h2>
+                
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="images/vecteezy_ai-generated-male-doctor-crossed-arms-isolated-on_35438423.png" alt="Doctor Avatar">
+                            <button class="change-avatar-btn">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <div class="profile-info">
+                            <h3>Dr. Vivek ChaudharY</h3>
+                            <p>Cardiologist</p>
+                            <p>Medical License: ML-12345678</p>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-content">
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">Personal Information</h4>
+                            <form id="personal-info-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-first-name">First Name</label>
+                                        <input type="text" id="profile-first-name" value="Sarah">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-last-name">Last Name</label>
+                                        <input type="text" id="profile-last-name" value="Johnson">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-email">Email</label>
+                                        <input type="email" id="profile-email" value="sarah.johnson@medicare.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-phone">Phone</label>
+                                        <input type="tel" id="profile-phone" value="(555) 123-4567">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-address">Address</label>
+                                    <textarea id="profile-address" rows="2">123 Medical Center Dr, Suite 456, New York, NY 10001</textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">Professional Information</h4>
+                            <form id="professional-info-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-specialty">Specialty</label>
+                                        <input type="text" id="profile-specialty" value="Cardiology">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-license">Medical License</label>
+                                        <input type="text" id="profile-license" value="ML-12345678">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-bio">Professional Bio</label>
+                                    <textarea id="profile-bio" rows="4">Dr. Sarah Johnson is a board-certified cardiologist with over 10 years of experience in treating cardiovascular diseases. She specializes in preventive cardiology and heart failure management.</textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">Emergency Schedule</h4>
+                            <div class="emergency-schedule-settings">
+                                <div class="form-group">
+                                    <label for="emergency-availability">Emergency Availability</label>
+                                    <select id="emergency-availability">
+                                        <option value="available">Available for Emergency Calls</option>
+                                        <option value="limited">Limited Availability</option>
+                                        <option value="unavailable">Not Available</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Preferred Emergency Days</label>
+                                    <div class="checkbox-group">
+                                        <label><input type="checkbox" name="emergency-days" value="monday"> Monday</label>
+                                        <label><input type="checkbox" name="emergency-days" value="tuesday"> Tuesday</label>
+                                        <label><input type="checkbox" name="emergency-days" value="wednesday"> Wednesday</label>
+                                        <label><input type="checkbox" name="emergency-days" value="thursday"> Thursday</label>
+                                        <label><input type="checkbox" name="emergency-days" value="friday"> Friday</label>
+                                        <label><input type="checkbox" name="emergency-days" value="saturday"> Saturday</label>
+                                        <label><input type="checkbox" name="emergency-days" value="sunday"> Sunday</label>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn-primary" id="save-emergency-schedule">Save Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h4 class="profile-section-title">Account Settings</h4>
+                            <form id="account-settings-form">
+                                <div class="form-group">
+                                    <label for="profile-current-password">Current Password</label>
+                                    <input type="password" id="profile-current-password" placeholder="Enter current password">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-new-password">New Password</label>
+                                        <input type="password" id="profile-new-password" placeholder="Enter new password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-confirm-password">Confirm Password</label>
+                                        <input type="password" id="profile-confirm-password" placeholder="Confirm new password">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Update Password</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const doctorName = document.querySelector('.doctor-details h3').textContent.trim(); // "Dr. Vivek" jaisa naam
+        
+            fetch(`/api/appointments?doctorName=${encodeURIComponent(doctorName)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const tableBody = document.getElementById('upcoming-appointments-table');
+                    if (!tableBody) return;
+        
+                    tableBody.innerHTML = ""; // clear old content
+        
+                    data.appointments.forEach(app => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${app.patientName}</td>
+                            <td>${app.time}</td>
+                            <td>${app.status}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(err => console.error('Error fetching appointments:', err));
+        });
+        </script>
+  
+  
+  
+    <script src="/js/script2.js"></script>
+</body>
+</html>

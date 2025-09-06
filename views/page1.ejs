@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Professional Healthcare Platform</title>
+    <link rel="stylesheet" href="/css/styles1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+</head>
+<body>
+    
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/hospital-logo-design-vector-medical-cross_53876-136743.avif" alt="MediCare Logo">
+                <h1>Medi<span>Care</span></h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button class="btn btn-outline">Login</button>
+                <button class="btn btn-primary">Register</button>
+            </div>
+            <div class="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+                <h1>Your Health, Our Priority</h1>
+                <p>Experience healthcare like never before with our comprehensive platform connecting patients with top medical professionals.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-lg" id="getStartedBtn">Get Started</button>
+                    <button class="btn btn-outline btn-lg">Learn More</button>
+                </div>
+                <div class="hero-stats-container">
+                    <div class="hero-stat">
+                        <h3><span class="counter" data-target="500">0</span>+</h3>
+                        <p>Doctors</p>
+                    </div>
+                    <div class="hero-stat">
+                        <h3><span class="counter" data-target="50000">0</span>+</h3>
+                        <p>Patients</p>
+                    </div>
+                    <div class="hero-stat">
+                        <h3><span class="counter" data-target="98">0</span>%</h3>
+                        <p>Satisfaction</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image" data-aos="fade-left" data-aos-duration="1000">
+                <img src="images/fun-3d-cartoon-illustration-indian-doctor_183364-114486-Photoroom.png" alt="Doctor illustration" class="floating-doctor">
+            </div>
+        </div>
+        <div class="hero-wave">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,128C672,128,768,160,864,176C960,192,1056,192,1152,176C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container wide-container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Why Choose MediCare</h2>
+                <p>Our platform offers a range of features designed to make healthcare accessible and convenient</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Expert Doctors</h3>
+                    <p>Access to certified healthcare professionals across all specialties</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Easy Booking</h3>
+                    <p>Schedule appointments with just a few clicks, anytime and anywhere</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Video Consultations</h3>
+                    <p>Connect with doctors remotely through secure video calls</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-medical-alt"></i>
+                    </div>
+                    <h3>Digital Records</h3>
+                    <p>Access your medical history and prescriptions anytime, anywhere</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container wide-container">
+            <div class="about-content" data-aos="fade-right">
+                <div class="section-header">
+                    <h2>About MediCare</h2>
+                    <p>Revolutionizing healthcare through technology</p>
+                </div>
+                <p>MediCare is a cutting-edge healthcare platform designed to bridge the gap between patients and healthcare providers. Our mission is to make quality healthcare accessible to everyone through innovative technology.</p>
+                <p>Founded by a team of healthcare professionals and tech experts, we understand the challenges faced by both patients and doctors in the traditional healthcare system.</p>
+                <div class="about-stats">
+                    <div class="stat-item blue-stat" data-aos="fade-up" data-aos-delay="100">
+                        <h3><span class="counter" data-target="5">0</span>+</h3>
+                        <p>Years of Service</p>
+                    </div>
+                    <div class="stat-item blue-stat" data-aos="fade-up" data-aos-delay="200">
+                        <h3><span class="counter" data-target="30">0</span>+</h3>
+                        <p>Cities</p>
+                    </div>
+                    <div class="stat-item blue-stat" data-aos="fade-up" data-aos-delay="300">
+                        <h3><span class="counter" data-target="50">0</span>+</h3>
+                        <p>Specialties</p>
+                    </div>
+                    <div class="stat-item blue-stat" data-aos="fade-up" data-aos-delay="400">
+                        <h3><span class="counter" data-target="24">0</span>/7</h3>
+                        <p>Support</p>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Learn More</button>
+            </div>
+            <div class="about-image" data-aos="fade-left">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/doctor-is-holding-lot-pills-3d-illustration_1419-3197.jpg-rPATemrxk7X83mF7rhk4P1WkX9oDf8.jpeg" alt="Doctor illustration">
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container wide-container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>How It Works</h2>
+                <p>Simple steps to get the care you need</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-line">
+                    <div class="timeline-progress"></div>
+                </div>
+                
+                <div class="timeline-item left" data-aos="fade-right">
+                    <div class="timeline-content">
+                        <div class="timeline-number">1</div>
+                        <div class="timeline-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="timeline-text">
+                            <h3>Create Account</h3>
+                            <p>Sign up in minutes and set up your personal health profile</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right" data-aos="fade-left">
+                    <div class="timeline-content">
+                        <div class="timeline-number">2</div>
+                        <div class="timeline-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="timeline-text">
+                            <h3>Find Doctors</h3>
+                            <p>Search specialists by expertise, ratings, or location</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left" data-aos="fade-right">
+                    <div class="timeline-content">
+                        <div class="timeline-number">3</div>
+                        <div class="timeline-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="timeline-text">
+                            <h3>Book Appointment</h3>
+                            <p>Select a convenient time slot and book instantly</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right" data-aos="fade-left">
+                    <div class="timeline-content">
+                        <div class="timeline-number">4</div>
+                        <div class="timeline-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <div class="timeline-text">
+                            <h3>Get Consultation</h3>
+                            <p>Visit in-person or connect through secure video call</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container wide-container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Our Services</h2>
+                <p>Comprehensive healthcare solutions designed for your convenience</p>
+            </div>
+            <div class="services-tabs" data-aos="fade-up">
+                <button class="tab-btn active" data-tab="patients">For Patients</button>
+                <button class="tab-btn" data-tab="doctors">For Doctors</button>
+                <button class="tab-btn" data-tab="hospitals">For Hospitals</button>
+            </div>
+            <div class="services-content">
+                <div class="tab-content active" id="patients-content">
+                    <div class="services-grid">
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                            <div class="service-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <h3>Appointment Booking</h3>
+                            <p>Schedule appointments with specialists at your convenience</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="service-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <h3>Find Specialists</h3>
+                            <p>Search for doctors by specialty, location, or availability</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                            <div class="service-icon">
+                                <i class="fas fa-notes-medical"></i>
+                            </div>
+                            <h3>Health Records</h3>
+                            <p>Secure access to your complete medical history</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                            <div class="service-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h3>Telemedicine</h3>
+                            <p>Virtual consultations from the comfort of your home</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="doctors-content">
+                    <div class="services-grid">
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                            <div class="service-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3>Schedule Management</h3>
+                            <p>Efficiently manage your availability and appointments</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="service-icon">
+                                <i class="fas fa-file-medical-alt"></i>
+                            </div>
+                            <h3>Patient Records</h3>
+                            <p>Access and update patient medical records securely</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                            <div class="service-icon">
+                                <i class="fas fa-comment-medical"></i>
+                            </div>
+                            <h3>Secure Messaging</h3>
+                            <p>Communicate with patients through encrypted channels</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                            <div class="service-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Practice Analytics</h3>
+                            <p>Gain insights into your practice with detailed analytics</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="hospitals-content">
+                    <div class="services-grid">
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                            <div class="service-icon">
+                                <i class="fas fa-hospital"></i>
+                            </div>
+                            <h3>Hospital Management</h3>
+                            <p>Comprehensive tools for efficient hospital operations</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="service-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>Staff Management</h3>
+                            <p>Manage doctors, nurses, and administrative staff</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                            <div class="service-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>Data Integration</h3>
+                            <p>Seamlessly integrate with existing hospital systems</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                            <div class="service-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>Compliance Tools</h3>
+                            <p>Stay compliant with healthcare regulations and standards</p>
+                            <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rest of the HTML remains unchanged -->
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container wide-container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>What Our Users Say</h2>
+                <p>Hear from doctors and patients who use MediCare</p>
+            </div>
+            <div class="testimonial-slider" data-aos="fade-up">
+                <div class="testimonial-track">
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"MediCare has transformed how I manage my practice. The scheduling system is intuitive, and the telemedicine feature has allowed me to help patients who can't travel to my office."</p>
+                        <div class="testimonial-author">
+                            <img src="images/vecteezy_ai-generated-a-smiling-doctor-with-glasses-and-a-white-lab_41408858.png" alt="Dr. Sarah Smith">
+                            <div class="author-info">
+                                <h4>Dr. Sarah Smith</h4>
+                                <p>Cardiologist</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"As someone with a chronic condition, MediCare has made managing my healthcare so much easier. I can book appointments, get prescriptions, and consult with my doctor all through one platform."</p>
+                        <div class="testimonial-author">
+                            <img src="images/vecteezy_ai-generated-male-doctor-crossed-arms-isolated-on_35438423.png" alt="John Doe">
+                            <div class="author-info">
+                                <h4>John Doe</h4>
+                                <p>Patient</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p class="testimonial-text">"The patient record system is comprehensive and secure. As a healthcare administrator, I appreciate how MediCare streamlines our operations while maintaining the highest standards of data privacy."</p>
+                        <div class="testimonial-author">
+                            <img src="images/vecteezy_ai-generated-female-doctor-png-isolated-on-transparent_35681291.png" alt="Maria Johnson">
+                            <div class="author-info">
+                                <h4>Maria Johnson</h4>
+                                <p>Healthcare Administrator</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-controls">
+                    <button class="control-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <div class="testimonial-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                    <button class="control-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container wide-container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Get in Touch</h2>
+                <p>Have questions? We're here to help!</p>
+            </div>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="contact-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Our Location</h3>
+                            <p>123 Healthcare Ave, Medical District, CA 90210</p>
+                        </div>
+                    </div>
+                    <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Phone Number</h3>
+                            <p>+1 (555) 123-4567</p>
+                            <p>+1 (555) 987-6543</p>
+                        </div>
+                    </div>
+                    <div class="contact-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Email Address</h3>
+                            <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cea7a0a8a18ea3abaaa7adafbcabe0ada1a3">[email&#160;protected]</a></p>
+                            <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89fafcf9f9e6fbfdc9e4ecede0eae8fbeca7eae6e4">[email&#160;protected]</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Working Hours</h3>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                            <p>Saturday: 9:00 AM - 1:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-container" data-aos="fade-up" data-aos-delay="500">
+                    <form class="contact-form">
+                        <h3>Send us a message</h3>
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="subject" placeholder="Subject" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-top">
+            <div class="container wide-container">
+                <div class="footer-grid">
+                    <div class="footer-info" data-aos="fade-up">
+                        <div class="footer-logo">
+                            <img src="images/medicare-logo-white.png" alt="MediCare Logo">
+                            <h2>Medi<span>Care</span></h2>
+                        </div>
+                        <p>MediCare is a modern healthcare platform designed to connect patients with healthcare providers through innovative technology.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-links" data-aos="fade-up" data-aos-delay="100">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#services">Services</a></li>
+                            <li><a href="#how-it-works">How It Works</a></li>
+                            <li><a href="#testimonials">Testimonials</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links" data-aos="fade-up" data-aos-delay="200">
+                        <h3>Our Services</h3>
+                        <ul>
+                            <li><a href="#">Find Doctors</a></li>
+                            <li><a href="#">Book Appointments</a></li>
+                            <li><a href="#">Video Consultation</a></li>
+                            <li><a href="#">Health Records</a></li>
+                            <li><a href="#">Prescriptions</a></li>
+                            <li><a href="#">Lab Tests</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links" data-aos="fade-up" data-aos-delay="300">
+                        <h3>Support</h3>
+                        <ul>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">FAQs</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Cookie Policy</a></li>
+                            <li><a href="#">HIPAA Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container wide-container">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2023 MediCare. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2>Welcome Back</h2>
+                <p>Login to your MediCare account</p>
+            </div>
+            <div class="modal-body">
+                <div class="user-type-selector">
+                    <button class="user-type active" data-type="patient">
+                        <i class="fas fa-user"></i>
+                        <span>Patient</span>
+                    </button>
+                    <button class="user-type" data-type="doctor">
+                        <i class="fas fa-user-md"></i>
+                        <span>Doctor</span>
+                    </button>
+                </div>
+                <form class="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <div class="password-field">
+                            <input type="password" id="login-password" required>
+                            <i class="fas fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-block" onclick="redirectToDashboard()">Login</button>
+
+                </form>
+                <div class="modal-footer">
+                    <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2>Create an Account</h2>
+                <p>Join MediCare today</p>
+            </div>
+            <div class="modal-body">
+                <div class="user-type-selector">
+                    <button class="user-type active" data-type="patient">
+                        <i class="fas fa-user"></i>
+                        <span>Patient</span>
+                    </button>
+                    <button class="user-type" data-type="doctor">
+                        <i class="fas fa-user-md"></i>
+                        <span>Doctor</span>
+                    </button>
+                </div>
+                <form class="register-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <div class="password-field">
+                            <input type="password" id="register-password" required>
+                            <i class="fas fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <div class="password-field">
+                            <input type="password" id="confirm-password" required>
+                            <i class="fas fa-eye-slash toggle-password"></i>
+                        </div>
+                    </div>
+                    <div class="form-agreement">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-block" onclick="redirectToDashboard()">Create Account</button>
+
+                </form>
+                <div class="modal-footer">
+                    <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="/js/script1.js"></script>
+</body>
+</html>
